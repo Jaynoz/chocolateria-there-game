@@ -25,17 +25,29 @@ workflows:
           mkdir -p "/Users/builder/Library/Application Support/Godot/export_templates/4.7.1.stable"
           cp -R /tmp/templates/* "/Users/builder/Library/Application Support/Godot/export_templates/4.7.1.stable"/
 
-      - name: Export
+      - name: Fix Project + Export
         script: |
           set -e
+          echo "=== FIXING UIDs ==="
+          # remove UIDs inválidos do Main.tscn
+          sed -i '' 's/ uid="uid:\/\/[^"]*"//g' scenes/Main.tscn || sed -i 's/ uid="uid:\/\/[^"]*"//g' scenes/Main.tscn
+          cat scenes/Main.tscn | head -n 20
+          
+          echo "=== PATCH EXPORT ==="
+          # garante que exporta só projeto xcode
+          sed -i '' 's/application\/export_project_only=false/application\/export_project_only=true/g' export_presets.cfg || sed -i 's/application\/export_project_only=false/application\/export_project_only=true/g' export_presets.cfg
+          cat export_presets.cfg | grep -A30 "preset.1.options"
+          
+          rm -rf ./build
           mkdir -p ./build/ios
-          /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --import
-          echo "--- EXPORT PRESETS ---"
-          cat export_presets.cfg | grep -A2 "name=\"iOS\""
-          /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --export-release "iOS" ./build/ios --verbose
-
-      - name: Check Build
-        script: |
-          ls -R ./build
+          /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --import --verbose 2>&1 | tail -n 100
+          echo "=== EXPORTING ==="
+          /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --export-release "iOS" ./build/ios --verbose 2>&1 | tee /tmp/full.log
+          echo "=== FULL LOG ==="
+          cat /tmp/full.log
+          echo "=== FILES ==="
+          ls -lah ./build/ios || true
+          ls -R ./build || true
     artifacts:
       - build/**
+      - /tmp/full.log
