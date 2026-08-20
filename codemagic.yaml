@@ -24,12 +24,15 @@ workflows:
           cp -R /tmp/templates/* "$DIR"/
           mkdir -p "/Users/builder/Library/Application Support/Godot/export_templates/4.7.1.stable"
           cp -R /tmp/templates/* "/Users/builder/Library/Application Support/Godot/export_templates/4.7.1.stable"/
-          ls "/Users/builder/Library/Application Support/Godot/export_templates/4.7.1.stable" | grep ios
 
       - name: Export
         script: |
+          set -e
+          mkdir -p ./build/ios
           /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --import
-          /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --export-release "iOS" ./build/ios/
+          echo "--- EXPORT PRESETS ---"
+          cat export_presets.cfg | grep -A2 "name=\"iOS\""
+          /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --export-release "iOS" ./build/ios --verbose
 
       - name: Check Build
         script: |
