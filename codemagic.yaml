@@ -1,0 +1,38 @@
+workflows:
+  ios-export:
+    name: iOS Export
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      xcode: latest
+    scripts:
+      - name: Install Godot 4.3 + Templates
+        script: |
+          set -e
+          cd /tmp
+          curl -L -o godot.zip https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_macos.universal.zip
+          unzip -o godot.zip
+          rm -rf /Applications/Godot.app
+          mv Godot.app /Applications/Godot.app
+          chmod +x /Applications/Godot.app/Contents/MacOS/Godot
+          /Applications/Godot.app/Contents/MacOS/Godot --version
+          VER="4.3.stable"
+          DIR="/Users/builder/Library/Application Support/Godot/export_templates/${VER}"
+          mkdir -p "$DIR"
+          curl -L -o /tmp/t.tpz https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
+          unzip -o /tmp/t.tpz -d /tmp/
+          cp -R /tmp/templates/* "$DIR"/
+          mkdir -p "/Users/builder/Library/Application Support/Godot/export_templates/4.7.1.stable"
+          cp -R /tmp/templates/* "/Users/builder/Library/Application Support/Godot/export_templates/4.7.1.stable"/
+          ls "/Users/builder/Library/Application Support/Godot/export_templates/4.7.1.stable" | grep ios
+
+      - name: Export
+        script: |
+          /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --import
+          /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --export-release "iOS" ./build/ios/
+
+      - name: Check Build
+        script: |
+          ls -R ./build
+    artifacts:
+      - build/**

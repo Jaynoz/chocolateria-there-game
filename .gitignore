@@ -1,0 +1,15 @@
+# Cache de importação do Godot — é regenerado sozinho a cada abertura do
+# projeto. Commitar isso é uma causa comum de erro de "arquivo corrompido"
+# em CI, porque o cache fica amarrado à máquina/versão que o gerou.
+.godot/
+
+# Builds exportados não deveriam ir pro repositório (ficam pesados e são
+# gerados a cada build)
+build/
+*.ipa
+*.aab
+*.apk
+
+# Arquivos específicos do macOS/Windows que às vezes entram sem querer
+.DS_Store
+Thumbs.db
