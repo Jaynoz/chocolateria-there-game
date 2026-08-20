@@ -1,53 +1,41 @@
-workflows:
-  ios-export:
-    name: iOS Export
-    max_build_duration: 60
-    instance_type: mac_mini_m2
-    environment:
-      xcode: latest
-    scripts:
-      - name: Install Godot 4.3 + Templates
+ - name: Fix Project + Export
         script: |
           set -e
-          cd /tmp
-          curl -L -o godot.zip https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_macos.universal.zip
-          unzip -o godot.zip
-          rm -rf /Applications/Godot.app
-          mv Godot.app /Applications/Godot.app
-          chmod +x /Applications/Godot.app/Contents/MacOS/Godot
-          /Applications/Godot.app/Contents/MacOS/Godot --version
-          VER="4.3.stable"
-          DIR="/Users/builder/Library/Application Support/Godot/export_templates/${VER}"
-          mkdir -p "$DIR"
-          curl -L -o /tmp/t.tpz https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
-          unzip -o /tmp/t.tpz -d /tmp/
-          cp -R /tmp/templates/* "$DIR"/
-          mkdir -p "/Users/builder/Library/Application Support/Godot/export_templates/4.7.1.stable"
-          cp -R /tmp/templates/* "/Users/builder/Library/Application Support/Godot/export_templates/4.7.1.stable"/
-
-      - name: Fix Project + Export
-        script: |
-          set -e
-          echo "=== FIXING UIDs ==="
-          # remove UIDs inválidos do Main.tscn
-          sed -i '' 's/ uid="uid:\/\/[^"]*"//g' scenes/Main.tscn || sed -i 's/ uid="uid:\/\/[^"]*"//g' scenes/Main.tscn
-          cat scenes/Main.tscn | head -n 20
+          echo "=== CLEAN ==="
+          rm -rf ./build/ios
+          mkdir -p ./build
           
-          echo "=== PATCH EXPORT ==="
-          # garante que exporta só projeto xcode
-          sed -i '' 's/application\/export_project_only=false/application\/export_project_only=true/g' export_presets.cfg || sed -i 's/application\/export_project_only=false/application\/export_project_only=true/g' export_presets.cfg
-          cat export_presets.cfg | grep -A30 "preset.1.options"
+          echo "=== PATCH EXPORT MINIMAL ==="
+          cat > export_presets.cfg << 'EOF'
+          [preset.0]
+          name="iOS"
+          platform="iOS"
+          runnable=true
+          export_filter="all_resources"
+          export_path="build/ios"
+          [preset.0.options]
+          custom_template/debug=""
+          custom_template/release=""
+          application/app_store_team_id="HW38KGP44Z"
+          application/bundle_identifier="br.com.therechocolates.chocolataria"
+          application/signature=""
+          application/short_version="1.0"
+          application/version="1"
+          application/icon_interpolation=4
+          application/export_project_only=true
+          capabilities/access_wifi=false
+          capabilities/game_center=false
+          capabilities/push_notifications=false
+          capabilities/in_app_purchases=false
+          EOF
+          cat export_presets.cfg
           
-          rm -rf ./build
-          mkdir -p ./build/ios
-          /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --import --verbose 2>&1 | tail -n 100
-          echo "=== EXPORTING ==="
+          echo "=== IMPORT ==="
+          /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --import 2>&1 | tail -n 20
+          
+          echo "=== EXPORT ==="
           /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --export-release "iOS" ./build/ios --verbose 2>&1 | tee /tmp/full.log
-          echo "=== FULL LOG ==="
           cat /tmp/full.log
-          echo "=== FILES ==="
-          ls -lah ./build/ios || true
-          ls -R ./build || true
-    artifacts:
-      - build/**
-      - /tmp/full.log
+          echo "=== RESULT ==="
+          ls -R ./build
+          find ./build -type f | head -n 30
