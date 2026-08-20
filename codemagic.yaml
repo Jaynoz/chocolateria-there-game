@@ -4,14 +4,28 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 30
     scripts:
-      - name: Fix UIDs + Export
+      - name: Install Godot 4.3 + Export
         script: |
           #!/usr/bin/env bash
           set -e
-          /Applications/Godot.app/Contents/MacOS/Godot --version
+          echo "Downloading Godot 4.3..."
+          curl -L -o godot.zip https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_macos.universal.zip
+          unzip -q godot.zip
+          GODOT_BIN="$PWD/Godot.app/Contents/MacOS/Godot"
+          chmod +x "$GODOT_BIN"
+          "$GODOT_BIN" --version
+
+          echo "Cleaning UIDs..."
           find . -name "*.tscn" -type f -exec sed -i '' 's/ uid="uid:\/\/[^"]*"//g' {} \; || true
+          
           rm -rf ./build/ios
           mkdir -p ./build/ios
-          /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --import
-          /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --export-release "iOS" ./build/ios --verbose
+          
+          echo "Import..."
+          "$GODOT_BIN" --headless --path . --import
+          
+          echo "Export..."
+          "$GODOT_BIN" --headless --path . --export-release "iOS" ./build/ios --verbose
+          
+          echo "Result:"
           ls -R ./build/ios
