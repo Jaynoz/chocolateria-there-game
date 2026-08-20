@@ -1,41 +1,26 @@
 workflows:
   ios-export:
     name: iOS Export
-    max_build_duration: 60
     instance_type: mac_mini_m2
+    max_build_duration: 30
     environment:
-      xcode: latest
+      vars:
+        XCODE_WORKSPACE: ""
+        XCODE_SCHEME: ""
     scripts:
-      - name: Install Godot 4.3
-        script: |
-          set -e
-          cd /tmp
-          curl -L -o godot.zip https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_macos.universal.zip
-          unzip -o godot.zip
-          rm -rf /Applications/Godot.app
-          mv Godot.app /Applications/Godot.app
-          chmod +x /Applications/Godot.app/Contents/MacOS/Godot
-          VER="4.3.stable"
-          DIR="/Users/builder/Library/Application Support/Godot/export_templates/${VER}"
-          mkdir -p "$DIR"
-          curl -L -o /tmp/t.tpz https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
-          unzip -o /tmp/t.tpz -d /tmp/
-          cp -R /tmp/templates/* "$DIR"/
-          mkdir -p "/Users/builder/Library/Application Support/Godot/export_templates/4.7.1.stable"
-          cp -R /tmp/templates/* "/Users/builder/Library/Application Support/Godot/export_templates/4.7.1.stable"/
       - name: Fix UIDs + Export
         script: |
+          #!/usr/bin/env bash
           set -e
-          set -o pipefail
+          echo "Godot version:"
+          /Applications/Godot.app/Contents/MacOS/Godot --version
           echo "Cleaning invalid UIDs"
           find . -name "*.tscn" -exec sed -i '' 's/ uid="uid:\/\/[^"]*"//g' {} \; 2>/dev/null || find . -name "*.tscn" -exec sed -i 's/ uid="uid:\/\/[^"]*"//g' {} \;
-          rm -rf ./build/ios
-          mkdir -p ./build
-          /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --import
+          rm -rf ./build
+          mkdir -p ./build/ios
+          echo "Import:"
+          /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --import 2>&1
+          echo "Export:"
           /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --export-release "iOS" ./build/ios --verbose 2>&1 | tee /tmp/full.log
-          echo "=== EXPORTED FILES ==="
+          echo "Result:"
           ls -R ./build
-          find ./build -type f | head -n 100
-    artifacts:
-      - build/**
-      - /tmp/full.log
