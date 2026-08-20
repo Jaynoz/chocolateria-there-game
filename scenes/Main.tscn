@@ -1,18 +1,16 @@
-[gd_scene format=3 uid="uid://c8g2n7x8k3qte"]
+[gd_scene load_steps=10 format=3 uid="uid://c8g2n7x8k3qte"]
 
-[ext_resource type="Script" uid="uid://ddx44m0w5t1np" path="res://scripts/ui/Main.gd" id="1_main"]
-[ext_resource type="Script" uid="uid://p2ydym2hpxdb" path="res://scripts/ui/Board.gd" id="2_board"]
-[ext_resource type="Script" uid="uid://c0yfsppn0euh6" path="res://scripts/ui/OrdersRow.gd" id="3_orders"]
-[ext_resource type="Script" uid="uid://cdx5imq4n52cq" path="res://scripts/ui/SuperVitrineRow.gd" id="4_vitrine"]
-[ext_resource type="Texture2D" uid="uid://dp73koyiydeo1" path="res://assets/logos/logo_game_icon.png" id="5b_logo_compact"]
-[ext_resource type="Texture2D" uid="uid://chu6c0tkq2wnu" path="res://assets/logos/logo_game.png" id="5_logo"]
-[ext_resource type="Texture2D" uid="uid://8lt5jdyhdl05" path="res://assets/mascot/estopa_feliz.png" id="6_mascot"]
-[ext_resource type="Texture2D" uid="uid://cmvppvnxbs728" path="res://assets/items/caixa_supermercado.png" id="7_super"]
+[ext_resource type="Script" path="res://scripts/ui/Main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/ui/Board.gd" id="2_board"]
+[ext_resource type="Script" path="res://scripts/ui/OrdersRow.gd" id="3_orders"]
+[ext_resource type="Script" path="res://scripts/ui/SuperVitrineRow.gd" id="4_vitrine"]
+[ext_resource type="Texture2D" path="res://assets/logos/logo_game.png" id="5_logo"]
+[ext_resource type="Texture2D" path="res://assets/logos/logo_game_icon.png" id="5b_logo_compact"]
+[ext_resource type="Texture2D" path="res://assets/mascot/estopa_feliz.png" id="6_mascot"]
+[ext_resource type="Texture2D" path="res://assets/items/caixa_supermercado.png" id="7_super"]
 [ext_resource type="Theme" path="res://theme/theme.tres" id="8_theme"]
 
-[node name="Main" type="Control" unique_id=1160517968]
-layout_mode = 3
-anchors_preset = 15
+[node name="Main" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -20,17 +18,15 @@ grow_vertical = 2
 theme = ExtResource("8_theme")
 script = ExtResource("1_main")
 
-[node name="Background" type="ColorRect" parent="." unique_id=1340173520]
-layout_mode = 0
+[node name="Background" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 color = Color(0.11, 0.02, 0.07, 1)
+mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=201074788]
-layout_mode = 0
+[node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -40,273 +36,226 @@ theme_override_constants/margin_top = 52
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 32
 
-[node name="MainVBox" type="VBoxContainer" parent="MarginContainer" unique_id=216531279]
-layout_mode = 2
+[node name="MainVBox" type="VBoxContainer" parent="MarginContainer"]
 theme_override_constants/separation = 10
 
-[node name="TopBar" type="HBoxContainer" parent="MarginContainer/MainVBox" unique_id=1793254720]
-layout_mode = 2
+[node name="TopBar" type="HBoxContainer" parent="MarginContainer/MainVBox"]
 theme_override_constants/separation = 8
 
-[node name="HeaderLogo" type="TextureRect" parent="MarginContainer/MainVBox/TopBar" unique_id=20891182]
+[node name="HeaderLogo" type="TextureRect" parent="MarginContainer/MainVBox/TopBar"]
 custom_minimum_size = Vector2(34, 34)
-layout_mode = 2
 texture = ExtResource("5b_logo_compact")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="HeaderTitle" type="Label" parent="MarginContainer/MainVBox/TopBar" unique_id=1223367389]
-layout_mode = 2
-theme_override_font_sizes/font_size = 15
+[node name="HeaderTitle" type="Label" parent="MarginContainer/MainVBox/TopBar"]
 text = "Chocolateria Therê"
 vertical_alignment = 1
+theme_override_font_sizes/font_size = 15
 
-[node name="Spacer" type="Control" parent="MarginContainer/MainVBox/TopBar" unique_id=1189287705]
-layout_mode = 2
+[node name="Spacer" type="Control" parent="MarginContainer/MainVBox/TopBar"]
 size_flags_horizontal = 3
 
-[node name="CoinLabel" type="Label" parent="MarginContainer/MainVBox/TopBar" unique_id=723282459]
+[node name="CoinLabel" type="Label" parent="MarginContainer/MainVBox/TopBar"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "🪙 0"
 
-[node name="GemLabel" type="Label" parent="MarginContainer/MainVBox/TopBar" unique_id=504129037]
+[node name="GemLabel" type="Label" parent="MarginContainer/MainVBox/TopBar"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "💎 5"
 
-[node name="PauseButton" type="Button" parent="MarginContainer/MainVBox/TopBar" unique_id=1193525522]
+[node name="PauseButton" type="Button" parent="MarginContainer/MainVBox/TopBar"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(34, 34)
-layout_mode = 2
 text = "⏸️"
 
-[node name="HeatLabel" type="Label" parent="MarginContainer/MainVBox" unique_id=370967269]
+[node name="HeatLabel" type="Label" parent="MarginContainer/MainVBox"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "+0/s"
 horizontal_alignment = 2
 
-[node name="HeatBar" type="ProgressBar" parent="MarginContainer/MainVBox" unique_id=1734356694]
+[node name="HeatBar" type="ProgressBar" parent="MarginContainer/MainVBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 10)
-layout_mode = 2
+max_value = 100.0
 value = 5.0
 show_percentage = false
 
-[node name="OrdersScroll" type="ScrollContainer" parent="MarginContainer/MainVBox" unique_id=1005653589]
+[node name="OrdersScroll" type="ScrollContainer" parent="MarginContainer/MainVBox"]
 custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
 vertical_scroll_mode = 0
 
-[node name="OrdersRow" type="HBoxContainer" parent="MarginContainer/MainVBox/OrdersScroll" unique_id=1307530097]
-layout_mode = 2
-theme_override_constants/separation = 8
+[node name="OrdersRow" type="HBoxContainer" parent="MarginContainer/MainVBox/OrdersScroll"]
 script = ExtResource("3_orders")
-
-[node name="BoardPanel" type="PanelContainer" parent="MarginContainer/MainVBox" unique_id=30020283]
-layout_mode = 2
-
-[node name="BoardVBox" type="VBoxContainer" parent="MarginContainer/MainVBox/BoardPanel" unique_id=668190126]
-layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Board" type="GridContainer" parent="MarginContainer/MainVBox/BoardPanel/BoardVBox" unique_id=1510266009]
-layout_mode = 2
+[node name="BoardPanel" type="PanelContainer" parent="MarginContainer/MainVBox"]
+
+[node name="BoardVBox" type="VBoxContainer" parent="MarginContainer/MainVBox/BoardPanel"]
+theme_override_constants/separation = 8
+
+[node name="Board" type="GridContainer" parent="MarginContainer/MainVBox/BoardPanel/BoardVBox"]
+script = ExtResource("2_board")
+columns = 5
 theme_override_constants/h_separation = 6
 theme_override_constants/v_separation = 6
-columns = 5
-script = ExtResource("2_board")
 
-[node name="OvenProgress" type="ProgressBar" parent="MarginContainer/MainVBox/BoardPanel/BoardVBox" unique_id=1222070894]
+[node name="OvenProgress" type="ProgressBar" parent="MarginContainer/MainVBox/BoardPanel/BoardVBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 6)
-layout_mode = 2
+max_value = 100.0
 show_percentage = false
 
-[node name="OvenButton" type="Button" parent="MarginContainer/MainVBox/BoardPanel/BoardVBox" unique_id=359150393]
+[node name="OvenButton" type="Button" parent="MarginContainer/MainVBox/BoardPanel/BoardVBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 44)
-layout_mode = 2
 text = "🍫 Produzir Cacau"
 
-[node name="SuperVitrineRow" type="HBoxContainer" parent="MarginContainer/MainVBox" unique_id=1503400770]
-layout_mode = 2
-theme_override_constants/separation = 6
-alignment = 1
+[node name="SuperVitrineRow" type="HBoxContainer" parent="MarginContainer/MainVBox"]
 script = ExtResource("4_vitrine")
+alignment = 1
+theme_override_constants/separation = 6
 
-[node name="PrestigePanel" type="PanelContainer" parent="MarginContainer/MainVBox" unique_id=460339914]
+[node name="PrestigePanel" type="PanelContainer" parent="MarginContainer/MainVBox"]
 unique_name_in_owner = true
 visible = false
-layout_mode = 2
 
-[node name="PrestigeVBox" type="VBoxContainer" parent="MarginContainer/MainVBox/PrestigePanel" unique_id=7528568]
-layout_mode = 2
+[node name="PrestigeVBox" type="VBoxContainer" parent="MarginContainer/MainVBox/PrestigePanel"]
 theme_override_constants/separation = 6
 
-[node name="PrestigeLabel" type="Label" parent="MarginContainer/MainVBox/PrestigePanel/PrestigeVBox" unique_id=26543558]
+[node name="PrestigeLabel" type="Label" parent="MarginContainer/MainVBox/PrestigePanel/PrestigeVBox"]
 unique_name_in_owner = true
-layout_mode = 2
-text = "🌟 Rebirth da Chocolateria"
 autowrap_mode = 3
+text = "🌟 Rebirth da Chocolateria"
 
-[node name="PrestigeButton" type="Button" parent="MarginContainer/MainVBox/PrestigePanel/PrestigeVBox" unique_id=1260542870]
+[node name="PrestigeButton" type="Button" parent="MarginContainer/MainVBox/PrestigePanel/PrestigeVBox"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "Renascer"
 
-[node name="ShopTabs" type="TabContainer" parent="MarginContainer/MainVBox" unique_id=1917641015]
+[node name="ShopTabs" type="TabContainer" parent="MarginContainer/MainVBox"]
 custom_minimum_size = Vector2(0, 160)
-layout_mode = 2
-current_tab = 0
 
-[node name="Upgrades" type="VBoxContainer" parent="MarginContainer/MainVBox/ShopTabs" unique_id=679385909]
-layout_mode = 2
+[node name="Upgrades" type="VBoxContainer" parent="MarginContainer/MainVBox/ShopTabs"]
 theme_override_constants/separation = 6
-metadata/_tab_index = 0
 
-[node name="OvenSpeedRow" type="HBoxContainer" parent="MarginContainer/MainVBox/ShopTabs/Upgrades" unique_id=218113258]
-layout_mode = 2
+[node name="OvenSpeedRow" type="HBoxContainer" parent="MarginContainer/MainVBox/ShopTabs/Upgrades"]
 
-[node name="OvenSpeedLabel" type="Label" parent="MarginContainer/MainVBox/ShopTabs/Upgrades/OvenSpeedRow" unique_id=785124387]
-layout_mode = 2
+[node name="OvenSpeedLabel" type="Label" parent="MarginContainer/MainVBox/ShopTabs/Upgrades/OvenSpeedRow"]
 size_flags_horizontal = 3
 text = "⏱️ Produção mais rápida"
 
-[node name="OvenSpeedButton" type="Button" parent="MarginContainer/MainVBox/ShopTabs/Upgrades/OvenSpeedRow" unique_id=127049180]
+[node name="OvenSpeedButton" type="Button" parent="MarginContainer/MainVBox/ShopTabs/Upgrades/OvenSpeedRow"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "🪙 60"
 
-[node name="IncomeRow" type="HBoxContainer" parent="MarginContainer/MainVBox/ShopTabs/Upgrades" unique_id=1183084462]
-layout_mode = 2
+[node name="IncomeRow" type="HBoxContainer" parent="MarginContainer/MainVBox/ShopTabs/Upgrades"]
 
-[node name="IncomeLabel" type="Label" parent="MarginContainer/MainVBox/ShopTabs/Upgrades/IncomeRow" unique_id=1340314383]
-layout_mode = 2
+[node name="IncomeLabel" type="Label" parent="MarginContainer/MainVBox/ShopTabs/Upgrades/IncomeRow"]
 size_flags_horizontal = 3
 text = "📈 Renda da vitrine +25%"
 
-[node name="IncomeButton" type="Button" parent="MarginContainer/MainVBox/ShopTabs/Upgrades/IncomeRow" unique_id=1056697905]
+[node name="IncomeButton" type="Button" parent="MarginContainer/MainVBox/ShopTabs/Upgrades/IncomeRow"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "🪙 90"
 
-[node name="SpawnBoostRow" type="HBoxContainer" parent="MarginContainer/MainVBox/ShopTabs/Upgrades" unique_id=1968031917]
-layout_mode = 2
+[node name="SpawnBoostRow" type="HBoxContainer" parent="MarginContainer/MainVBox/ShopTabs/Upgrades"]
 
-[node name="SpawnBoostLabel" type="Label" parent="MarginContainer/MainVBox/ShopTabs/Upgrades/SpawnBoostRow" unique_id=1689712738]
-layout_mode = 2
+[node name="SpawnBoostLabel" type="Label" parent="MarginContainer/MainVBox/ShopTabs/Upgrades/SpawnBoostRow"]
 size_flags_horizontal = 3
 text = "🤖 Assistente (cacau rápido, 30s)"
 
-[node name="SpawnBoostButton" type="Button" parent="MarginContainer/MainVBox/ShopTabs/Upgrades/SpawnBoostRow" unique_id=1125969276]
+[node name="SpawnBoostButton" type="Button" parent="MarginContainer/MainVBox/ShopTabs/Upgrades/SpawnBoostRow"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "💎 8"
 
-[node name="Bonus" type="VBoxContainer" parent="MarginContainer/MainVBox/ShopTabs" unique_id=372250832]
+[node name="Bonus" type="VBoxContainer" parent="MarginContainer/MainVBox/ShopTabs"]
 visible = false
-layout_mode = 2
 theme_override_constants/separation = 6
-metadata/_tab_index = 1
 
-[node name="WatchAdRow" type="HBoxContainer" parent="MarginContainer/MainVBox/ShopTabs/Bonus" unique_id=1498609819]
-layout_mode = 2
+[node name="WatchAdRow" type="HBoxContainer" parent="MarginContainer/MainVBox/ShopTabs/Bonus"]
 
-[node name="WatchAdLabel" type="Label" parent="MarginContainer/MainVBox/ShopTabs/Bonus/WatchAdRow" unique_id=1194744740]
-layout_mode = 2
+[node name="WatchAdLabel" type="Label" parent="MarginContainer/MainVBox/ShopTabs/Bonus/WatchAdRow"]
 size_flags_horizontal = 3
 text = "🎬 Dobrar renda por 30s"
 
-[node name="WatchAdButton" type="Button" parent="MarginContainer/MainVBox/ShopTabs/Bonus/WatchAdRow" unique_id=1411831524]
+[node name="WatchAdButton" type="Button" parent="MarginContainer/MainVBox/ShopTabs/Bonus/WatchAdRow"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "Assistir"
 
-[node name="NoAdsRow" type="HBoxContainer" parent="MarginContainer/MainVBox/ShopTabs/Bonus" unique_id=1007506874]
-layout_mode = 2
+[node name="NoAdsRow" type="HBoxContainer" parent="MarginContainer/MainVBox/ShopTabs/Bonus"]
 
-[node name="NoAdsLabel" type="Label" parent="MarginContainer/MainVBox/ShopTabs/Bonus/NoAdsRow" unique_id=65177984]
-layout_mode = 2
+[node name="NoAdsLabel" type="Label" parent="MarginContainer/MainVBox/ShopTabs/Bonus/NoAdsRow"]
 size_flags_horizontal = 3
 text = "🚫 Remover anúncios (IAP)"
 
-[node name="NoAdsButton" type="Button" parent="MarginContainer/MainVBox/ShopTabs/Bonus/NoAdsRow" unique_id=1355401548]
+[node name="NoAdsButton" type="Button" parent="MarginContainer/MainVBox/ShopTabs/Bonus/NoAdsRow"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "R$ 9,90"
 
-[node name="OfflineModal" type="PanelContainer" parent="." unique_id=130182607]
+[node name="OfflineModal" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 visible = false
-layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="OfflineCenter" type="CenterContainer" parent="OfflineModal" unique_id=1096948421]
-layout_mode = 2
+[node name="OfflineCenter" type="CenterContainer" parent="OfflineModal"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="OfflineCard" type="PanelContainer" parent="OfflineModal/OfflineCenter" unique_id=261199677]
+[node name="OfflineCard" type="PanelContainer" parent="OfflineModal/OfflineCenter"]
 custom_minimum_size = Vector2(280, 0)
-layout_mode = 2
 
-[node name="OfflineVBox" type="VBoxContainer" parent="OfflineModal/OfflineCenter/OfflineCard" unique_id=1126325690]
-layout_mode = 2
+[node name="OfflineVBox" type="VBoxContainer" parent="OfflineModal/OfflineCenter/OfflineCard"]
 theme_override_constants/separation = 8
 
-[node name="OfflineMascot" type="TextureRect" parent="OfflineModal/OfflineCenter/OfflineCard/OfflineVBox" unique_id=1422286024]
+[node name="OfflineMascot" type="TextureRect" parent="OfflineModal/OfflineCenter/OfflineCard/OfflineVBox"]
 custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-size_flags_horizontal = 4
 texture = ExtResource("6_mascot")
 expand_mode = 1
 stretch_mode = 5
+size_flags_horizontal = 4
 
-[node name="OfflineTitle" type="Label" parent="OfflineModal/OfflineCenter/OfflineCard/OfflineVBox" unique_id=975351156]
-layout_mode = 2
+[node name="OfflineTitle" type="Label" parent="OfflineModal/OfflineCenter/OfflineCard/OfflineVBox"]
 text = "Bem-vindo de volta!"
 horizontal_alignment = 1
 
-[node name="OfflineAwayLabel" type="Label" parent="OfflineModal/OfflineCenter/OfflineCard/OfflineVBox" unique_id=1908186125]
+[node name="OfflineAwayLabel" type="Label" parent="OfflineModal/OfflineCenter/OfflineCard/OfflineVBox"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "Sua chocolateria trabalhou sozinha"
-horizontal_alignment = 1
 autowrap_mode = 3
+horizontal_alignment = 1
 
-[node name="OfflineEarnedLabel" type="Label" parent="OfflineModal/OfflineCenter/OfflineCard/OfflineVBox" unique_id=1915858022]
+[node name="OfflineEarnedLabel" type="Label" parent="OfflineModal/OfflineCenter/OfflineCard/OfflineVBox"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "🪙 0"
 horizontal_alignment = 1
 
-[node name="OfflineDoubleButton" type="Button" parent="OfflineModal/OfflineCenter/OfflineCard/OfflineVBox" unique_id=108286987]
+[node name="OfflineDoubleButton" type="Button" parent="OfflineModal/OfflineCenter/OfflineCard/OfflineVBox"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "🎬 Assistir anúncio: dobrar (demo)"
 
-[node name="OfflineCollectButton" type="Button" parent="OfflineModal/OfflineCenter/OfflineCard/OfflineVBox" unique_id=95482263]
+[node name="OfflineCollectButton" type="Button" parent="OfflineModal/OfflineCenter/OfflineCard/OfflineVBox"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "Coletar"
 
-[node name="WinModal" type="PanelContainer" parent="." unique_id=563059852]
+[node name="WinModal" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 visible = false
-layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="WinFireworks" type="CPUParticles2D" parent="WinModal" unique_id=1300105365]
+[node name="WinFireworks" type="CPUParticles2D" parent="WinModal"]
 unique_name_in_owner = true
 position = Vector2(210, 300)
 emitting = false
 amount = 80
+lifetime = 1.0
 one_shot = true
 explosiveness = 1.0
 direction = Vector2(0, -1)
@@ -318,209 +267,177 @@ scale_amount_min = 2.0
 scale_amount_max = 4.0
 color = Color(0.91, 0.64, 0.24, 1)
 
-[node name="WinCenter" type="CenterContainer" parent="WinModal" unique_id=562787165]
-layout_mode = 2
-
-[node name="WinCard" type="PanelContainer" parent="WinModal/WinCenter" unique_id=1159011638]
-custom_minimum_size = Vector2(300, 0)
-layout_mode = 2
-
-[node name="WinVBox" type="VBoxContainer" parent="WinModal/WinCenter/WinCard" unique_id=1259182039]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="WinMascot" type="TextureRect" parent="WinModal/WinCenter/WinCard/WinVBox" unique_id=1603946430]
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-size_flags_horizontal = 4
-texture = ExtResource("6_mascot")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="WinTitle" type="Label" parent="WinModal/WinCenter/WinCard/WinVBox" unique_id=545434168]
-layout_mode = 2
-text = "🎉 5 vitrines completas!"
-horizontal_alignment = 1
-
-[node name="WinDesc" type="Label" parent="WinModal/WinCenter/WinCard/WinVBox" unique_id=430650759]
-layout_mode = 2
-text = "Sua chocolateria abasteceu supermercados de verdade. Hora de começar um novo ciclo, mais forte!"
-horizontal_alignment = 1
-autowrap_mode = 3
-
-[node name="WinSuperImg" type="TextureRect" parent="WinModal/WinCenter/WinCard/WinVBox" unique_id=1951119840]
-custom_minimum_size = Vector2(0, 140)
-layout_mode = 2
-texture = ExtResource("7_super")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="RestartButton" type="Button" parent="WinModal/WinCenter/WinCard/WinVBox" unique_id=1837658346]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Jogar de novo"
-
-[node name="PauseModal" type="PanelContainer" parent="." unique_id=429005832]
-unique_name_in_owner = true
-process_mode = 3
-visible = false
-layout_mode = 0
+[node name="WinCenter" type="CenterContainer" parent="WinModal"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PauseCenter" type="CenterContainer" parent="PauseModal" unique_id=667714854]
-layout_mode = 2
-
-[node name="PauseCard" type="PanelContainer" parent="PauseModal/PauseCenter" unique_id=466381779]
+[node name="WinCard" type="PanelContainer" parent="WinModal/WinCenter"]
 custom_minimum_size = Vector2(300, 0)
-layout_mode = 2
 
-[node name="PauseVBox" type="VBoxContainer" parent="PauseModal/PauseCenter/PauseCard" unique_id=452409352]
-layout_mode = 2
+[node name="WinVBox" type="VBoxContainer" parent="WinModal/WinCenter/WinCard"]
+theme_override_constants/separation = 8
+
+[node name="WinMascot" type="TextureRect" parent="WinModal/WinCenter/WinCard/WinVBox"]
+custom_minimum_size = Vector2(64, 64)
+texture = ExtResource("6_mascot")
+expand_mode = 1
+stretch_mode = 5
+size_flags_horizontal = 4
+
+[node name="WinTitle" type="Label" parent="WinModal/WinCenter/WinCard/WinVBox"]
+text = "🎉 5 vitrines completas!"
+horizontal_alignment = 1
+
+[node name="WinDesc" type="Label" parent="WinModal/WinCenter/WinCard/WinVBox"]
+text = "Sua chocolateria abasteceu supermercados de verdade. Hora de começar um novo ciclo, mais forte!"
+autowrap_mode = 3
+horizontal_alignment = 1
+
+[node name="WinSuperImg" type="TextureRect" parent="WinModal/WinCenter/WinCard/WinVBox"]
+custom_minimum_size = Vector2(0, 140)
+texture = ExtResource("7_super")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RestartButton" type="Button" parent="WinModal/WinCenter/WinCard/WinVBox"]
+unique_name_in_owner = true
+text = "Jogar de novo"
+
+[node name="PauseModal" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+process_mode = 3
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseCenter" type="CenterContainer" parent="PauseModal"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseCard" type="PanelContainer" parent="PauseModal/PauseCenter"]
+custom_minimum_size = Vector2(300, 0)
+
+[node name="PauseVBox" type="VBoxContainer" parent="PauseModal/PauseCenter/PauseCard"]
 theme_override_constants/separation = 10
 
-[node name="PauseTitle" type="Label" parent="PauseModal/PauseCenter/PauseCard/PauseVBox" unique_id=346696179]
-layout_mode = 2
+[node name="PauseTitle" type="Label" parent="PauseModal/PauseCenter/PauseCard/PauseVBox"]
 text = "⏸️ Pausado"
 horizontal_alignment = 1
 
-[node name="PauseTabs" type="TabContainer" parent="PauseModal/PauseCenter/PauseCard/PauseVBox" unique_id=368613254]
+[node name="PauseTabs" type="TabContainer" parent="PauseModal/PauseCenter/PauseCard/PauseVBox"]
 custom_minimum_size = Vector2(0, 190)
-layout_mode = 2
-current_tab = 0
 
-[node name="Config" type="VBoxContainer" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs" unique_id=574229509]
-layout_mode = 2
+[node name="Config" type="VBoxContainer" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs"]
 theme_override_constants/separation = 8
-metadata/_tab_index = 0
 
-[node name="LanguageRow" type="HBoxContainer" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config" unique_id=2129268210]
-layout_mode = 2
+[node name="LanguageRow" type="HBoxContainer" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config"]
 
-[node name="LanguageLabel" type="Label" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config/LanguageRow" unique_id=1642025905]
-layout_mode = 2
+[node name="LanguageLabel" type="Label" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config/LanguageRow"]
 size_flags_horizontal = 3
 text = "🌐 Idioma"
 
-[node name="LanguageButton" type="OptionButton" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config/LanguageRow" unique_id=125731490]
+[node name="LanguageButton" type="OptionButton" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config/LanguageRow"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 0)
-layout_mode = 2
 
-[node name="SoundRow" type="HBoxContainer" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config" unique_id=6059299]
-layout_mode = 2
+[node name="SoundRow" type="HBoxContainer" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config"]
 
-[node name="SoundLabel" type="Label" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config/SoundRow" unique_id=494258664]
-layout_mode = 2
+[node name="SoundLabel" type="Label" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config/SoundRow"]
 size_flags_horizontal = 3
 text = "🔊 Efeitos sonoros"
 
-[node name="SoundToggle" type="CheckButton" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config/SoundRow" unique_id=10246739]
+[node name="SoundToggle" type="CheckButton" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config/SoundRow"]
 unique_name_in_owner = true
-layout_mode = 2
 button_pressed = true
 
-[node name="VisitStoreButton" type="Button" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config" unique_id=2123581291]
+[node name="VisitStoreButton" type="Button" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "🍫 Visitar loja oficial"
 
-[node name="ResetProgressButton" type="Button" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config" unique_id=1000624445]
+[node name="ResetProgressButton" type="Button" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Config"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "🗑️ Apagar progresso"
 
-[node name="Conta" type="VBoxContainer" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs" unique_id=582795939]
+[node name="Conta" type="VBoxContainer" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs"]
 visible = false
-layout_mode = 2
 theme_override_constants/separation = 8
-metadata/_tab_index = 1
 
-[node name="AccountStatusLabel" type="Label" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Conta" unique_id=381575186]
+[node name="AccountStatusLabel" type="Label" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Conta"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "Jogando como convidado"
-horizontal_alignment = 1
 autowrap_mode = 3
+horizontal_alignment = 1
 
-[node name="SignInAppleButton" type="Button" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Conta" unique_id=995602245]
+[node name="SignInAppleButton" type="Button" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Conta"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "🍎 Entrar com Apple"
 
-[node name="SignInGoogleButton" type="Button" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Conta" unique_id=962351863]
+[node name="SignInGoogleButton" type="Button" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Conta"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "🔵 Entrar com Google"
 
-[node name="SignOutButton" type="Button" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Conta" unique_id=1269715318]
+[node name="SignOutButton" type="Button" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Conta"]
 unique_name_in_owner = true
 visible = false
-layout_mode = 2
 text = "Sair da conta"
 
-[node name="AccountSpacer" type="Control" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Conta" unique_id=101501683]
-layout_mode = 2
+[node name="AccountSpacer" type="Control" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Conta"]
 size_flags_vertical = 3
 
-[node name="DeleteAccountButton" type="Button" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Conta" unique_id=381751033]
+[node name="DeleteAccountButton" type="Button" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Conta"]
 unique_name_in_owner = true
 visible = false
-layout_mode = 2
 text = "⚠️ Excluir minha conta"
 
-[node name="DeleteAccountConfirmDialog" type="ConfirmationDialog" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Conta" unique_id=1606642908]
+[node name="DeleteAccountConfirmDialog" type="ConfirmationDialog" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Conta"]
 unique_name_in_owner = true
 process_mode = 3
 title = "Excluir conta?"
 initial_position = 1
-ok_button_text = "Excluir conta"
 dialog_text = "Isso apaga sua conta e o save salvo na nuvem — sem volta. O progresso salvo neste aparelho continua aqui. Tem certeza?"
+ok_button_text = "Excluir conta"
 cancel_button_text = "Cancelar"
 
-[node name="Sobre" type="VBoxContainer" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs" unique_id=1317404746]
+[node name="Sobre" type="VBoxContainer" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs"]
 visible = false
-layout_mode = 2
 theme_override_constants/separation = 6
-metadata/_tab_index = 2
 
-[node name="AboutLogo" type="TextureRect" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Sobre" unique_id=116015295]
+[node name="AboutLogo" type="TextureRect" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Sobre"]
 custom_minimum_size = Vector2(0, 90)
-layout_mode = 2
 texture = ExtResource("5_logo")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="AboutVersion" type="Label" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Sobre" unique_id=686901308]
-layout_mode = 2
+[node name="AboutVersion" type="Label" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Sobre"]
 text = "v1.0 · protótipo"
 horizontal_alignment = 1
 
-[node name="AboutCredits" type="Label" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Sobre" unique_id=858439725]
-layout_mode = 2
+[node name="AboutCredits" type="Label" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Sobre"]
 text = "Mascote: Estopa 🐾
 Baseado na marca Therê Chocolates
 \"Chocolate com afeto, tão gostoso quanto abraço de Vó.\""
-horizontal_alignment = 1
 autowrap_mode = 3
+horizontal_alignment = 1
 
-[node name="AboutStoreLink" type="Label" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Sobre" unique_id=1802706634]
-layout_mode = 2
+[node name="AboutStoreLink" type="Label" parent="PauseModal/PauseCenter/PauseCard/PauseVBox/PauseTabs/Sobre"]
 text = "therechocolates.com.br"
 horizontal_alignment = 1
 
-[node name="ResumeButton" type="Button" parent="PauseModal/PauseCenter/PauseCard/PauseVBox" unique_id=1084898685]
+[node name="ResumeButton" type="Button" parent="PauseModal/PauseCenter/PauseCard/PauseVBox"]
 unique_name_in_owner = true
-layout_mode = 2
 text = "▶️ Continuar"
 
-[node name="ResetConfirmDialog" type="ConfirmationDialog" parent="PauseModal" unique_id=1122300035]
+[node name="ResetConfirmDialog" type="ConfirmationDialog" parent="PauseModal"]
 unique_name_in_owner = true
 process_mode = 3
 title = "Apagar progresso?"
 initial_position = 1
-ok_button_text = "Apagar"
 dialog_text = "Isso apaga moedas, gemas, upgrades e vitrines — sem volta. Tem certeza?"
+ok_button_text = "Apagar"
 cancel_button_text = "Cancelar"

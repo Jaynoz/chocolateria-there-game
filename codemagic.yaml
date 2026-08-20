@@ -1,28 +1,109 @@
 workflows:
-  ios-export:
-    name: iOS Export
+  ios-workflow:
+    name: iOS Build and App Store Distribution
+    max_build_duration: 120
     instance_type: mac_mini_m2
-    max_build_duration: 30
-    scripts:
-      - name: Install Godot + Templates + Export
-        script: |
-          #!/usr/bin/env bash
-          set -e
-          echo "Downloading Godot 4.3..."
-          curl -L -o godot.zip https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_macos.universal.zip
-          unzip -q godot.zip
-          GODOT_BIN="$PWD/Godot.app/Contents/MacOS/Godot"
-          chmod +x "$GODOT_BIN"
 
-          echo "Downloading export templates..."
-          mkdir -p ~/Library/Application\ Support/Godot/export_templates/4.3.stable
-          curl -L -o templates.tpz https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
-          unzip -q templates.tpz
-          mv templates/* ~/Library/Application\ Support/Godot/export_templates/4.3.stable/
-          
-          "$GODOT_BIN" --version
-          rm -rf ./build/ios
-          mkdir -p ./build/ios
-          "$GODOT_BIN" --headless --path . --import
-          "$GODOT_BIN" --headless --path . --export-release "iOS" ./build/ios --verbose
-          ls -R ./build/ios
+    environment:
+      # Essas 3 variáveis (APP_STORE_CONNECT_ISSUER_ID, APP_STORE_CONNECT_KEY_IDENTIFIER,
+      # APP_STORE_CONNECT_PRIVATE_KEY) NÃO ficam neste arquivo — configure um grupo
+      # chamado "app_store_credentials" em Codemagic → Team settings → Environment
+      # variable groups, com o toggle "Secret" ativado em cada uma. O valor da chave
+      # privada (.p8) é o CONTEÚDO do arquivo, colado no campo — nunca um arquivo no
+      # repositório.
+      groups:
+        - app_store_credentials
+      vars:
+        BUNDLE_ID: "br.com.therechocolates.chocolataria"
+        XCODE_PROJECT: "build/ios/Chocolateria.xcodeproj"
+        # ⚠️ Confirme o nome exato do .xcodeproj e do scheme depois que o passo
+        # "Export Godot Project to Xcode" rodar com sucesso pela primeira vez (veja o
+        # passo de diagnóstico abaixo) — o Godot pode sanitizar acentos/espaços do
+        # nome do projeto de um jeito que não dá pra prever sem rodar de verdade.
+        XCODE_SCHEME: "Chocolateria"
+
+    scripts:
+      - name: Install Godot Engine
+        script: |
+          set -e  # para o script na hora, no primeiro erro — não deixa continuar escondido
+
+          echo "===== CHECKPOINT 1: baixando o editor ====="
+          curl -fSL -o godot.zip https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_macos.universal.zip
+          echo "===== CHECKPOINT 2: editor baixado, tamanho: ====="
+          ls -la godot.zip
+
+          echo "===== CHECKPOINT 3: extraindo editor ====="
+          unzip -q godot.zip
+          mv Godot.app /Applications/Godot.app
+          ln -sf /Applications/Godot.app/Contents/MacOS/Godot /usr/local/bin/godot
+          echo "===== CHECKPOINT 4: versão instalada: ====="
+          godot --version
+
+          echo "===== CHECKPOINT 5: baixando templates de exportação (arquivo grande, ~900MB, pode demorar alguns minutos) ====="
+          curl -fSL -o templates.tpz https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_export_templates.tpz
+          echo "===== CHECKPOINT 6: templates baixados, tamanho: ====="
+          ls -la templates.tpz
+
+          echo "===== CHECKPOINT 7: extraindo templates ====="
+          mkdir -p "$HOME/Library/Application Support/Godot/export_templates/4.7.1.stable"
+          unzip -q -o templates.tpz -d /tmp/godot_templates
+          mv /tmp/godot_templates/templates/* "$HOME/Library/Application Support/Godot/export_templates/4.7.1.stable/"
+
+          echo "===== CHECKPOINT 8 (FINAL): templates instalados: ====="
+          ls "$HOME/Library/Application Support/Godot/export_templates/4.7.1.stable/"
+          echo "===== TUDO OK ====="
+
+      - name: Export Godot Project to Xcode
+        script: |
+          echo "===== VERIFICANDO SE OS TEMPLATES EXISTEM ANTES DE EXPORTAR ====="
+          ls -la "$HOME/Library/Application Support/Godot/export_templates/4.7.1.stable/" 2>&1 || echo "!!! A PASTA DE TEMPLATES NÃO EXISTE OU ESTÁ VAZIA !!!"
+          echo "===== FIM DA VERIFICAÇÃO ====="
+          mkdir -p build/ios
+          godot --headless --export-release "iOS" build/ios/Chocolateria.xcodeproj
+
+      - name: Diagnóstico — lista o que o Godot realmente gerou
+        script: |
+          echo "--- Conteúdo de build/ios/ (confirme o nome real do .xcodeproj) ---"
+          ls -la build/ios/
+          echo "--- Schemes disponíveis no projeto gerado ---"
+          xcodebuild -list -project "$XCODE_PROJECT" || true
+
+      - name: Set up keychain para assinatura
+        script: keychain initialize
+
+      - name: Buscar certificado e perfil de provisionamento automaticamente
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+
+      - name: Adicionar certificado ao keychain
+        script: keychain add-certificates
+
+      - name: Aplicar assinatura ao projeto Xcode
+        script: |
+          xcode-project use-profiles \
+            --project "$XCODE_PROJECT"
+
+      - name: Gerar o .ipa assinado
+        script: |
+          xcode-project build-ipa \
+            --project "$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME"
+
+    artifacts:
+      - build/ios/**/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+
+    publishing:
+      # Descomente e preencha depois que os builds estiverem passando de forma
+      # consistente — publica automaticamente no TestFlight a cada build.
+      # app_store_connect:
+      #   auth: integration
+      #   submit_to_testflight: true
+      email:
+        recipients:
+          - rfirmianosilva@gmail.com
+        notify:
+          success: true
+          failure: true

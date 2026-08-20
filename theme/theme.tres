@@ -1,90 +1,90 @@
-[gd_resource type="Theme" format=3 uid="uid://cl30wjjryy4kd"]
-
-[sub_resource type="StyleBoxFlat" id="SB_ButtonDisabled"]
-content_margin_left = 12.0
-content_margin_top = 8.0
-content_margin_right = 12.0
-content_margin_bottom = 8.0
-bg_color = Color(0.360784, 0.196078, 0.278431, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxFlat" id="SB_ButtonHover"]
-content_margin_left = 12.0
-content_margin_top = 8.0
-content_margin_right = 12.0
-content_margin_bottom = 8.0
-bg_color = Color(0.94902, 0.576471, 0.262745, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[gd_resource type="Theme" load_steps=8 format=3]
 
 [sub_resource type="StyleBoxFlat" id="SB_ButtonNormal"]
-content_margin_left = 12.0
-content_margin_top = 8.0
-content_margin_right = 12.0
-content_margin_bottom = 8.0
 bg_color = Color(0.745098, 0.360784, 0.090196, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxFlat" id="SB_ButtonPressed"]
 content_margin_left = 12.0
 content_margin_top = 8.0
 content_margin_right = 12.0
 content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="SB_ButtonHover"]
+bg_color = Color(0.949020, 0.576471, 0.262745, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="SB_ButtonPressed"]
 bg_color = Color(0.596078, 0.288627, 0.072157, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="SB_ButtonDisabled"]
+bg_color = Color(0.360784, 0.196078, 0.278431, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
 
 [sub_resource type="StyleBoxFlat" id="SB_Panel"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
 bg_color = Color(0.239216, 0.058824, 0.156863, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.431373, 0.168627, 0.458824, 0.5)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
 
 [sub_resource type="StyleBoxFlat" id="SB_ProgressBg"]
-bg_color = Color(0.05, 0.01, 0.03, 1)
+bg_color = Color(0.050000, 0.010000, 0.030000, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="SB_ProgressFill"]
-bg_color = Color(0.94902, 0.576471, 0.262745, 1)
+bg_color = Color(0.949020, 0.576471, 0.262745, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [resource]
+Button/styles/normal = SubResource("SB_ButtonNormal")
+Button/styles/hover = SubResource("SB_ButtonHover")
+Button/styles/pressed = SubResource("SB_ButtonPressed")
+Button/styles/disabled = SubResource("SB_ButtonDisabled")
 Button/colors/font_color = Color(1, 1, 1, 1)
-Button/colors/font_disabled_color = Color(0.827451, 0.74902, 0.835294, 0.6)
 Button/colors/font_hover_color = Color(1, 1, 1, 1)
 Button/colors/font_pressed_color = Color(1, 1, 1, 1)
-Button/styles/disabled = SubResource("SB_ButtonDisabled")
-Button/styles/hover = SubResource("SB_ButtonHover")
-Button/styles/normal = SubResource("SB_ButtonNormal")
-Button/styles/pressed = SubResource("SB_ButtonPressed")
-Label/colors/font_color = Color(0.980392, 0.972549, 0.85098, 1)
+Button/colors/font_disabled_color = Color(0.827451, 0.749020, 0.835294, 0.6)
 Panel/styles/panel = SubResource("SB_Panel")
 PanelContainer/styles/panel = SubResource("SB_Panel")
+Label/colors/font_color = Color(0.980392, 0.972549, 0.850980, 1)
 ProgressBar/styles/background = SubResource("SB_ProgressBg")
 ProgressBar/styles/fill = SubResource("SB_ProgressFill")
