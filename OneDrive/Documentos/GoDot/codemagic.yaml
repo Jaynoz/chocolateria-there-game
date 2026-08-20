@@ -21,15 +21,17 @@ workflows:
       - name: Install Godot Export Templates
         script: |
           set -e
-          VERSION="4.3.stable"
-          TEMPLATE_DIR="/Users/builder/Library/Application Support/Godot/export_templates/${VERSION}"
-          mkdir -p "$TEMPLATE_DIR"
-          echo "Baixando templates para $VERSION..."
+          # Baixa uma vez
           curl -L -o /tmp/templates.tpz https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
           unzip -o /tmp/templates.tpz -d /tmp/
-          mv /tmp/templates/* "$TEMPLATE_DIR"/ || true
-          ls -lh "$TEMPLATE_DIR"
-          echo "Templates instalados"
+          # Instala para TODAS as versões que o Godot pode procurar
+          for VER in "4.3.stable" "4.7.1.stable" "4.4.stable" "4.3"; do
+            TEMPLATE_DIR="/Users/builder/Library/Application Support/Godot/export_templates/${VER}"
+            mkdir -p "$TEMPLATE_DIR"
+            cp -R /tmp/templates/* "$TEMPLATE_DIR"/ || true
+            echo "Instalado em $TEMPLATE_DIR"
+            ls "$TEMPLATE_DIR" | head -20
+          done
 
       - name: Export Godot Project to Xcode
         script: |
@@ -38,18 +40,14 @@ workflows:
           if [ ! -f "$GODOT_BIN" ]; then
             GODOT_BIN=$(find /Applications -name "Godot" -type f | head -1)
           fi
-          # reimport e export
           $GODOT_BIN --headless --path . --import
-          $GODOT_BIN --headless --path . --export-release "iOS" ./build/ios/ThereChocolates.xcodeproj || \
-          $GODOT_BIN --headless --path . --export-release "iOS" ./ios_build/ || \
+          $GODOT_BIN --headless --path . --export-release "iOS" ./build/ios/ || \
           $GODOT_BIN --headless --path . --export-debug "iOS" ./build/ios/
 
-      - name: Diagnostic - lista o que o Godot realmente gerou
+      - name: Diagnostic
         script: |
-          ls -R
           ls -R ./build || true
+          ls -R "/Users/builder/Library/Application Support/Godot/export_templates" || true
 
     artifacts:
       - build/**
-      - ios_build/**
-      - build/ios/**
