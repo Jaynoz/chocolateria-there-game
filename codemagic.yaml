@@ -4,7 +4,7 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 30
     scripts:
-      - name: Install Godot 4.3 + Export
+      - name: Install Godot + Templates + Export
         script: |
           #!/usr/bin/env bash
           set -e
@@ -13,19 +13,16 @@ workflows:
           unzip -q godot.zip
           GODOT_BIN="$PWD/Godot.app/Contents/MacOS/Godot"
           chmod +x "$GODOT_BIN"
-          "$GODOT_BIN" --version
 
-          echo "Cleaning UIDs..."
-          find . -name "*.tscn" -type f -exec sed -i '' 's/ uid="uid:\/\/[^"]*"//g' {} \; || true
+          echo "Downloading export templates..."
+          mkdir -p ~/Library/Application\ Support/Godot/export_templates/4.3.stable
+          curl -L -o templates.tpz https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
+          unzip -q templates.tpz
+          mv templates/* ~/Library/Application\ Support/Godot/export_templates/4.3.stable/
           
+          "$GODOT_BIN" --version
           rm -rf ./build/ios
           mkdir -p ./build/ios
-          
-          echo "Import..."
           "$GODOT_BIN" --headless --path . --import
-          
-          echo "Export..."
           "$GODOT_BIN" --headless --path . --export-release "iOS" ./build/ios --verbose
-          
-          echo "Result:"
           ls -R ./build/ios
