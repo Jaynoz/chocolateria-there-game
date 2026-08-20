@@ -1,105 +1,55 @@
 workflows:
-  ios-workflow:
-    name: iOS Build and App Store Distribution
-    max_build_duration: 120
+  ios-export:
+    name: iOS Export
+    max_build_duration: 60
     instance_type: mac_mini_m2
- 
     environment:
-      groups:
-        - app_store_credentials
       vars:
-        BUNDLE_ID: "br.com.therechocolates.chocolataria"
-        XCODE_PROJECT: "build/ios/Chocolateria.xcodeproj"
-        XCODE_SCHEME: "Chocolateria"
- 
+        GODOT_VERSION: "4.3"
+      xcode: latest
     scripts:
       - name: Install Godot Engine
         script: |
+          brew install godot --cask || true
+          GODOT_BIN="/Applications/Godot.app/Contents/MacOS/Godot"
+          if [ ! -f "$GODOT_BIN" ]; then
+            GODOT_BIN=$(find /Applications -name "Godot" -type f | head -1)
+          fi
+          echo "Godot bin: $GODOT_BIN"
+          $GODOT_BIN --version
+
+      - name: Install Godot Export Templates
+        script: |
           set -e
-          echo "===== CHECKPOINT 1: baixando o editor ====="
-          curl -fSL -o godot.zip https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_macos.universal.zip
-          echo "===== CHECKPOINT 2: editor baixado, tamanho: ====="
-          ls -la godot.zip
- 
-          echo "===== CHECKPOINT 3: extraindo editor ====="
-          unzip -q godot.zip
-          mv Godot.app /Applications/Godot.app
-          ln -sf /Applications/Godot.app/Contents/MacOS/Godot /usr/local/bin/godot
-          echo "===== CHECKPOINT 4: versão instalada: ====="
-          godot --version
- 
-          echo "===== CHECKPOINT 5: baixando templates de exportação ====="
-          curl -fSL -o templates.tpz https://github.com/godotengine/godot/releases/download/4.7.1-stable/Godot_v4.7.1-stable_export_templates.tpz
-          echo "===== CHECKPOINT 6: templates baixados, tamanho: ====="
-          ls -la templates.tpz
- 
-          echo "===== CHECKPOINT 7: extraindo templates ====="
-          mkdir -p "$HOME/Library/Application Support/Godot/export_templates/4.7.1.stable"
-          rm -rf /tmp/godot_templates
-          unzip -q -o templates.tpz -d /tmp/godot_templates
-          mv /tmp/godot_templates/templates/* "$HOME/Library/Application Support/Godot/export_templates/4.7.1.stable/"
- 
-          echo "===== CHECKPOINT 8 (FINAL): templates instalados: ====="
-          ls -lh "$HOME/Library/Application Support/Godot/export_templates/4.7.1.stable/"
-          echo "===== TUDO OK ====="
- 
+          VERSION="4.3.stable"
+          TEMPLATE_DIR="/Users/builder/Library/Application Support/Godot/export_templates/${VERSION}"
+          mkdir -p "$TEMPLATE_DIR"
+          echo "Baixando templates para $VERSION..."
+          curl -L -o /tmp/templates.tpz https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
+          unzip -o /tmp/templates.tpz -d /tmp/
+          mv /tmp/templates/* "$TEMPLATE_DIR"/ || true
+          ls -lh "$TEMPLATE_DIR"
+          echo "Templates instalados"
+
       - name: Export Godot Project to Xcode
         script: |
           set -e
-          echo "===== VERIFICANDO SE OS TEMPLATES EXISTEM ====="
-          ls -lh "$HOME/Library/Application Support/Godot/export_templates/4.7.1.stable/" || echo "!!! PASTA DE TEMPLATES NAO EXISTE !!!"
+          GODOT_BIN="/Applications/Godot.app/Contents/MacOS/Godot"
+          if [ ! -f "$GODOT_BIN" ]; then
+            GODOT_BIN=$(find /Applications -name "Godot" -type f | head -1)
+          fi
+          # reimport e export
+          $GODOT_BIN --headless --path . --import
+          $GODOT_BIN --headless --path . --export-release "iOS" ./build/ios/ThereChocolates.xcodeproj || \
+          $GODOT_BIN --headless --path . --export-release "iOS" ./ios_build/ || \
+          $GODOT_BIN --headless --path . --export-debug "iOS" ./build/ios/
 
-          echo "===== LIMPANDO BUILD ANTIGO ====="
-          rm -rf build/ios
-          mkdir -p build/ios
+      - name: Diagnostic - lista o que o Godot realmente gerou
+        script: |
+          ls -R
+          ls -R ./build || true
 
-          echo "===== REIMPORTANDO O PROJETO (gera .godot) ====="
-          godot --headless --import
-
-          echo "===== EXPORTANDO PARA IOS - AGORA PARA A PASTA ====="
-          godot --headless --export-release "iOS" build/ios
-
-          echo "===== RESULTADO DO EXPORT ====="
-          ls -la build/ios/
- 
-      - name: Diagnóstico — lista o que o Godot realmente gerou
-        script: |
-          echo "--- Conteúdo de build/ios/ ---"
-          ls -la build/ios/
-          echo "--- Schemes disponíveis ---"
-          xcodebuild -list -project "$XCODE_PROJECT" || true
- 
-      - name: Set up keychain para assinatura
-        script: keychain initialize
- 
-      - name: Buscar certificado e perfil de provisionamento automaticamente
-        script: |
-          app-store-connect fetch-signing-files "$BUNDLE_ID" \
-            --type IOS_APP_STORE \
-            --create
- 
-      - name: Adicionar certificado ao keychain
-        script: keychain add-certificates
- 
-      - name: Aplicar assinatura ao projeto Xcode
-        script: |
-          xcode-project use-profiles \
-            --project "$XCODE_PROJECT"
- 
-      - name: Gerar o .ipa assinado
-        script: |
-          xcode-project build-ipa \
-            --project "$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME"
- 
     artifacts:
-      - build/ios/**/*.ipa
-      - /tmp/xcodebuild_logs/*.log
- 
-    publishing:
-      email:
-        recipients:
-          - rfirmianosilva@gmail.com
-        notify:
-          success: true
-          failure: true
+      - build/**
+      - ios_build/**
+      - build/ios/**
